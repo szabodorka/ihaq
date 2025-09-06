@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  db:
+    image: askmate-db:latest
+    build: ./database
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - askmate-network
+  backend:
+    image: askmate-backend:latest
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      askmate.database.url: ${ASKMATE_DATABASE_URL}
+      askmate.database.username: ${ASKMATE_DATABASE_USERNAME}
+      askmate.database.password: ${ASKMATE_DATABASE_PASSWORD}
+      spring.datasource.url: ${ASKMATE_DATABASE_URL}
+      spring.datasource.username: ${ASKMATE_DATABASE_USERNAME}
+      spring.datasource.password: ${ASKMATE_DATABASE_PASSWORD}
+      spring.datasource.driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    depends_on:
+      - db
+    networks:
+      - askmate-network
+  nginx:
+    image: askmate-frontend:latest
+    build: ./frontend/askmate-frontend/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - askmate-network
+
+networks:
+  askmate-network:
+    driver: bridge
