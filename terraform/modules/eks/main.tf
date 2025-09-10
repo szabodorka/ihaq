@@ -202,3 +202,49 @@ resource "terraform_data" "configure_kubectl" {
     command = "aws eks update-kubeconfig --region eu-central-1 --name ${aws_eks_cluster.this.name} --profile default"
   }
 }
+
+data "tls_certificate" "cluster" {
+  url = aws_eks_cluster.this.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks" {
+  url             = aws_eks_cluster.this.identity[0].oidc[0].issuer
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.cluster.certificates[0].sha1_fingerprint]
+}
+
+data "aws_eks_cluster_auth" "this" {
+  name = aws_eks_cluster.this.name
+}
+
+provider "kubernetes" {
+  host                   = aws_eks_cluster.this.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.this.token
+}
+
+provider "helm" {
+  kubernetes = {
+    host                   = aws_eks_cluster.this.endpoint
+    cluster_ca_certificate = base64decode(aws_eks_cluster.this.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.this.token
+  }
+
+  registry_config_path   = "${path.root}/.helm/registry.json"
+  repository_cache       = "${path.root}/.helm/cache"
+  repository_config_path = "${path.root}/.helm/repositories.yaml"
+}
+
+module "lbc" {
+    source = "./modules/lbc"
+    cluster_oidc_issuer = aws_eks_cluster.this.identity[0].oidc[0].issuer
+    cluster_name = aws_eks_cluster.this.name
+    openid_connect_provider = aws_iam_openid_connect_provider.eks.arn
+    vpc_id = var.vpc_id
+
+    depends_on = [
+    aws_iam_openid_connect_provider.eks,
+    aws_eks_cluster.this,
+    aws_eks_node_group.ihaq_nodes
+    ]
+}
