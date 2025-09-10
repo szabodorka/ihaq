@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: ihaq-ingress
   annotations:
-    kubernetes.io/ingress.class: alb #controller is listening to this
-    alb.ingress.kubernetes.io/scheme: internet-facing #public ALB
-    alb.ingress.kubernetes.io/target-type: ip #targeting the pods directly
+    kubernetes.io/ingress.class: alb # Informs the cluster that this Ingress should be handled by the AWS Load Balancer Controller
+    alb.ingress.kubernetes.io/scheme: internet-facing # public ALB, available over the internet. Choose internal for private apps.
+    alb.ingress.kubernetes.io/target-type: instance # Targeting EC2 worker node IP and reaching pods over NodePort. Use ip in case of ClusterIP Service type, as it will target the pods directly.
 spec:
   ingressClassName: alb
   rules:
