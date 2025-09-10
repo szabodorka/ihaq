@@ -29,12 +29,12 @@ kind: Service
 metadata:
   name: ihaq-frontend
   # annotations:
-  #   alb.ingress.kubernetes.io/scheme: internet-facing
-  #   alb.ingress.kubernetes.io/target-type: instance
+  #   alb.ingress.kubernetes.io/scheme: internet-facing # If the Service is LoadBalancer type
+  #   alb.ingress.kubernetes.io/target-type: instance # If the Service is LoadBalancer type
 spec:
   selector:
     app: ihaq-frontend
   ports:
     - port: 80
       targetPort: 80
-  type: ClusterIP
+  type: NodePort
