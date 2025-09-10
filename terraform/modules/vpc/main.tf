@@ -119,3 +119,46 @@ resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
+
+# DB subnets
+resource "aws_subnet" "db_a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.5.0/24"
+  availability_zone       = "eu-central-1a"
+
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "db-subnet-a"
+    }
+}
+
+resource "aws_subnet" "db_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.6.0/24"
+  availability_zone       = "eu-central-1b"
+
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "db-subnet-b"
+    }
+}
+
+resource "aws_route_table" "db" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "db-rt"
+    }
+}
+
+resource "aws_route_table_association" "db_a" {
+  route_table_id = aws_route_table.db.id
+  subnet_id      = aws_subnet.db_a.id
+}
+
+resource "aws_route_table_association" "db_b" {
+  route_table_id = aws_route_table.db.id
+  subnet_id      = aws_subnet.db_b.id
+}
