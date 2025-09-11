@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "lb_controller" {
-  name = "ihaq-sd-lb-controller-role"
+  name = "ihaq-lb-controller-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

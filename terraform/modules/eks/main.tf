@@ -18,7 +18,7 @@ resource "aws_security_group" "eks_cluster" {
   }
 
   tags = {
-    Name = "ihaq-sd-eks-cluster-sg"
+    Name = "ihaq-eks-cluster-sg"
   }
 }
 
@@ -40,13 +40,13 @@ resource "aws_security_group" "eks_nodes" {
   }
 
   tags = {
-    Name = "ihaq-sd-eks-nodes-sg"
+    Name = "ihaq-eks-nodes-sg"
   }
 }
 
 # Roles
 resource "aws_iam_role" "eks_cluster" {
-  name = "ihaq-sd-eks-cluster-role"
+  name = "ihaq-eks-cluster-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -63,7 +63,7 @@ resource "aws_iam_role" "eks_cluster" {
 }
 
 resource "aws_iam_role" "eks_node" {
-  name = "ihaq-sd-eks-node-role"
+  name = "ihaq-eks-node-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -112,7 +112,7 @@ resource "aws_iam_role_policy_attachment" "ecr_read_policy" {
 
 # EKS cluster
 resource "aws_eks_cluster" "this" {
-  name     = "ihaq-sd-eks-cluster"
+  name     = "ihaq-eks-cluster"
   version  = "1.33"
   role_arn = aws_iam_role.eks_cluster.arn
 
@@ -143,7 +143,7 @@ resource "aws_eks_cluster" "this" {
 resource "aws_eks_node_group" "ihaq_nodes" {
   cluster_name    = aws_eks_cluster.this.name
   version         = aws_eks_cluster.this.version
-  node_group_name = "ihaq-sd-nodes"
+  node_group_name = "ihaq-nodes"
   node_role_arn   = aws_iam_role.eks_node.arn
   subnet_ids      = var.private_subnet_ids
 
@@ -157,11 +157,11 @@ resource "aws_eks_node_group" "ihaq_nodes" {
   instance_types = ["t3.medium"]
 
   labels = {
-    "node-type" = "ihaq-sd-nodes"
+    "node-type" = "ihaq-nodes"
   }
 
   tags = {
-    Name = "ihaq-sd-nodes"
+    Name = "ihaq-nodes"
   }
 
   depends_on = [

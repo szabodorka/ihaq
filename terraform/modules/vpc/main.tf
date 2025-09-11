@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "ihaq-sd-vpc"
+    Name = "ihaq-vpc"
   }
 }
 
@@ -15,7 +15,7 @@ resource "aws_subnet" "public_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "ihaq-sd-public-subnet-a"
+    Name = "ihaq-public-subnet-a"
     "kubernetes.io/role/elb" = "1"
   }
 }
@@ -26,7 +26,7 @@ resource "aws_subnet" "public_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "ihaq-sd-public-subnet-b"
+    Name = "ihaq-public-subnet-b"
     "kubernetes.io/role/elb" = "1"
   }
 }
@@ -37,7 +37,7 @@ resource "aws_subnet" "private_a" {
   availability_zone       = "eu-central-1a"
 
   tags = {
-    Name = "ihaq-sd-private-subnet-a"
+    Name = "ihaq-private-subnet-a"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -48,7 +48,7 @@ resource "aws_subnet" "private_b" {
   availability_zone       = "eu-central-1b"
 
   tags = {
-    Name = "ihaq-sd-private-subnet-b"
+    Name = "ihaq-private-subnet-b"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -57,7 +57,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "ihaq-sd-igw"
+    Name = "ihaq-igw"
   }
 }
 
@@ -70,7 +70,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public_a.id
 
   tags = {
-    Name = "ihaq-sd-nat"
+    Name = "ihaq-nat"
   }
 
   depends_on = [aws_internet_gateway.igw]
@@ -85,7 +85,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "ihaq-sd-rt-public"
+    Name = "ihaq-rt-public"
   }
 }
 
@@ -98,7 +98,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "ihaq-sd-rt-private"
+    Name = "ihaq-rt-private"
   }
 }
 
@@ -129,7 +129,7 @@ resource "aws_subnet" "db_a" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "db-subnet-a"
+    Name = "ihaq-db-subnet-a"
     }
 }
 
@@ -141,7 +141,7 @@ resource "aws_subnet" "db_b" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "db-subnet-b"
+    Name = "ihaq-db-subnet-b"
     }
 }
 
@@ -149,7 +149,7 @@ resource "aws_route_table" "db" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "db-rt"
+    Name = "ihaq-db-rt"
     }
 }
 

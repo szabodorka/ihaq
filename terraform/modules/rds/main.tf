@@ -24,7 +24,7 @@ resource "aws_db_subnet_group" "ihaq" {
 
 resource "aws_security_group" "db" {
   vpc_id = var.vpc_id
-  name   = "ihaq-sd-rds-sg"
+  name   = "ihaq-rds-sg"
 
     egress {
     from_port   = 0
