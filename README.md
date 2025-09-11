@@ -71,9 +71,7 @@ This will:
 Apply the Kubernetes manifests:
 
 ```bash
-kubectl apply -f k8s/configmap.yaml
-kubectl apply -f k8s/secret.yaml
-kubectl apply -f k8s/backend-deployment.yaml
+kubectl apply -f k8s/backend.yaml
 kubectl apply -f k8s/frontend-deployment.yaml
 kubectl apply -f k8s/ingress.yaml
 ```
