@@ -25,7 +25,7 @@ resource "aws_iam_role" "lb_controller" {
 
 resource "aws_iam_policy" "alb_controller" {
   name   = "AWSLoadBalancerControllerIAMPolicy-v2_13_4"
-  policy = file("${path.module}/policy.json")
+  policy = file("${path.module}/lbc_policy.json")
 }
 
 resource "aws_iam_role_policy_attachment" "lb_controller_policy" {
