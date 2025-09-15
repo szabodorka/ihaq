@@ -27,7 +27,7 @@ services:
       - askmate-network
   nginx:
     image: askmate-frontend:latest
-    build: ./frontend/askmate-frontend/nginx
+    build: ./frontend
     ports:
       - "80:80"
     depends_on:
