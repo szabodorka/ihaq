@@ -20,4 +20,8 @@ module "rds" {
   cluster_security_group_id = module.eks.cluster_security_group_id
 }
 
+module "ecr" {
+  source = "./modules/ecr"
+}
+
 
