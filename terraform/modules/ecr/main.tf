@@ -1,31 +1,3 @@
-# resource "aws_ecr_repository" "backend" {
-#   name                 = "ihaq-backend"
-#   image_tag_mutability = "MUTABLE"
-#   force_delete         = true
-
-#   image_scanning_configuration {
-#     scan_on_push = true
-#     }
-
-#   tags = {
-#     Name = "ihaq-backend"
-#     }
-# }
-
-# resource "aws_ecr_repository" "frontend" {
-#   name                 = "ihaq-frontend"
-#   image_tag_mutability = "MUTABLE"
-#   force_delete         = true
-
-#   image_scanning_configuration {
-#     scan_on_push = true
-#     }
-
-#   tags = {
-#     Name = "ihaq-frontend"
-#     }
-# }
-
 resource "aws_ecr_repository" "ihaq" {
   name                 = "ihaq"
   image_tag_mutability = "MUTABLE"
@@ -46,11 +18,10 @@ resource "terraform_data" "push_images" {
     ]
 
   provisioner "local-exec" {
-    interpreter = ["PowerShell", "-Command"]
     command = <<-EOT
       # Login to ECR
       docker logout
-      aws ecr get-login-password --region eu-central-1 --profile default | docker login --username AWS --password-stdin ${aws_ecr_repository.ihaq.repository_url}
+      docker login --username AWS --password $(aws ecr get-login-password --region eu-central-1 --profile default) ${aws_ecr_repository.ihaq.repository_url}
 
       # Build and push backend image
       cd .././backend
