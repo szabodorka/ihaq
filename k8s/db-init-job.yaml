@@ -26,7 +26,7 @@ spec:
                   name: ihaq-config
                   key: IHAQ_DATABASE_NAME
             - name: DB_HOST
-              value: "terraform-20250909160933679000000004.cz8uywwwm8hs.eu-central-1.rds.amazonaws.com"
+              value: "<rds-endpoint>"
             - name: DB_PORT
               value: "5432"
           command: ["sh", "-c"]
