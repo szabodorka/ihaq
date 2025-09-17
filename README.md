@@ -68,6 +68,8 @@ This will:
 
 ### 3. Deploy Application to Kubernetes
 
+Insert RDS Endpoint from output into backend.yaml and db-init-job-yaml files.
+
 Apply the Kubernetes manifests:
 
 ```bash
@@ -97,12 +99,21 @@ Open the given ALB URL in your browser
 
 ### 6. Cleanup
 
-- Remove LoadBalancer:
+- Remove all Kubernetes objects:
 
 ```bash
-kubectl delete -f ingress.yaml
+kubectl delete -f k8s
 kubectl get ingress # must be empty
 ```
+
+**Identical with the following commands:
+kubectl delete -f ingress.yaml
+kubectl delete -f frontend-deployment.yaml
+kubectl delete -f backend-deployment.yaml
+kubectl delete -f db-init-job.yaml
+kubectl delete configmap ihaq-config
+kubectl delete secret ihaq-secret
+kubectl delete configmap ihaq-migrations**
 
 Monitor on EC2 Console if Load Balancer, Target Group and Network Interface is removed
 
